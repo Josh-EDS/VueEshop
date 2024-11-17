@@ -1,20 +1,21 @@
 <template>
   <header class="site-header">
-  <a href="/">
-    <div class="logo">
-      <span style="color: white;font-size: large;">Lecoinbon | Page D'Administration</span> 
-      <link rel="stylesheet" href="http://www.lecoinbon.fr.000.pe/_next/static/css/19842df133a4d6ba.css" data-n-g="">
-    </div>
-  </a>
-  <nav class="header-nav">
-    <router-link to="/register" class="login-btn">Register</router-link>
-    <router-link to="/login" class="login-btn">Login</router-link>
-  </nav>
-</header>
-<div class="container">
-  <p style="padding: 0.5cm"></p>
+    <a href="/">
+      <div class="logo">
+        <span style="color: white; font-size: large;">Lecoinbon | Page D'Administration</span>
+        <link rel="stylesheet" href="http://www.lecoinbon.fr.000.pe/_next/static/css/19842df133a4d6ba.css" data-n-g="">
+      </div>
+    </a>
+    <nav class="header-nav">
+      <router-link to="/register" class="login-btn">Register</router-link>
+      <router-link to="/login" class="login-btn">Login</router-link>
+    </nav>
+  </header>
+  <div class="container">
+    <p style="padding: 0.5cm"></p>
     <h1>Administration</h1>
 
+    <!-- Create Product Form -->
     <div class="form-section">
       <div>
         <h2>Créer un nouveau produit</h2>
@@ -30,6 +31,7 @@
         </form>
       </div>
 
+      <!-- Create Category Form -->
       <div>
         <h2>Créer une nouvelle catégorie</h2>
         <form @submit.prevent="addCategory">
@@ -39,6 +41,7 @@
         </form>
       </div>
 
+      <!-- Create User Form -->
       <div>
         <h2>Créer un nouvel utilisateur</h2>
         <form @submit.prevent="addUser">
@@ -55,6 +58,7 @@
       </div>
     </div>
 
+    <!-- Editable Product List -->
     <h2>Liste des produits</h2>
     <table>
       <thead>
@@ -71,18 +75,19 @@
       </thead>
       <tbody>
         <tr v-for="product in products" :key="product.id">
-          <td>{{ product.id }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.prix }}</td>
-          <td>{{ product.note }}</td>
-          <td><img :src="product.image_url" alt="product image" width="100" /></td>
-          <td>{{ product.category_id }}</td>
-          <td><button @click="deleteItem('product', product.id)">Supprimer</button></td>
+          <td><input v-model="product.id" /></td>
+          <td><input v-model="product.name" /></td>
+          <td><input v-model="product.description" /></td>
+          <td><input v-model="product.prix" /></td>
+          <td><input v-model="product.note" /></td>
+          <td><input v-model="product.image_url" /></td>
+          <td><input v-model="product.category_id" /></td>
+          <td><button @click="updateProduct(product)">Update</button> <button @click="deleteItem('product', product.id)">Supprimer</button></td>
         </tr>
       </tbody>
     </table>
 
+    <!-- Editable Category List -->
     <h2>Liste des catégories</h2>
     <table>
       <thead>
@@ -94,18 +99,18 @@
       </thead>
       <tbody>
         <tr v-for="category in categories" :key="category.id">
-          <td>{{ category.id }}</td>
-          <td>{{ category.name }}</td>
-          <td><button @click="deleteItem('category', category.id)">Supprimer</button></td>
+          <td><input v-model="category.id" /></td>
+          <td><input v-model="category.name" /></td>
+          <td><button @click="updateCategory(category)">Update</button> <button @click="deleteItem('category', category.id)">Supprimer</button></td>
         </tr>
       </tbody>
     </table>
 
+    <!-- Editable User List -->
     <h2>Liste des utilisateurs</h2>
     <table>
       <thead>
         <tr>
-          <th>ID</th>
           <th>Prénom</th>
           <th>Nom</th>
           <th>Email</th>
@@ -115,11 +120,10 @@
       </thead>
       <tbody>
         <tr v-for="user in users" :key="user.email">
-          <td>{{ user.id }}</td>
-          <td>{{ user.firstname }}</td>
-          <td>{{ user.lastname }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
+          <td><input v-model="user.firstname" /></td>
+          <td><input v-model="user.lastname" /></td>
+          <td><input v-model="user.email" /></td>
+          <td><input v-model="user.role" /></td>
           <td><button @click="deleteUser(user.email)">Supprimer</button></td>
         </tr>
       </tbody>
@@ -240,6 +244,42 @@ export default {
       });
     };
 
+    const updateProduct = async (product) => {
+      await fetch(`http://localhost:3000/product/${product.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          role: "admin",
+        },
+        body: JSON.stringify(product),
+      });
+      fetchData("product", products);
+    };
+
+    const updateCategory = async (category) => {
+      await fetch(`http://localhost:3000/category/${category.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          role: "admin",
+        },
+        body: JSON.stringify(category),
+      });
+      fetchData("category", categories);
+    };
+
+    const updateUser = async (user) => {
+      await fetch(`http://localhost:3000/user/${user.email}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          role: "admin",
+        },
+        body: JSON.stringify(user),
+      });
+      fetchData("user", users);
+    };
+
     onMounted(() => {
       fetchData("product", products);
       fetchData("category", categories);
@@ -258,6 +298,9 @@ export default {
       addUser,
       deleteItem,
       deleteUser,
+      updateProduct,
+      updateCategory,
+      updateUser,
     };
   },
 };

@@ -23,11 +23,11 @@ window.onload = function() {
             const articlenull = document.getElementById("Articlenull");
             if (articlenull) articlenull.remove();
 
-            document.querySelectorAll('[style="--open-delay: 300ms;"]').forEach((element, i) => {
+            document.querySelectorAll('[style="--open-delay:300ms;"]').forEach((element, i) => {
                 if (i < 10) {
                     element.style.cursor = 'pointer';
                     element.addEventListener('click', () => {
-                        window.location.href = `./?sorted=${i + 1}`;
+                        window.location.href = `/?sorted=${i + 1}`;
                     });
                 }
             });
@@ -36,14 +36,14 @@ window.onload = function() {
             if (articlenull) articlenull.remove();
 
             document.querySelectorAll('a[href="./tout"]').forEach((link, i) => {
-                if (i < 10) link.href = `./?sorted=${i + 1}`;
+                if (i < 10) link.href = `/?sorted=${i + 1}`;
             });
 
-            document.querySelectorAll('[style="--open-delay: 300ms;"]').forEach((element, i) => {
+            document.querySelectorAll('[style="--open-delay:300ms;"]').forEach((element, i) => {
                 if (i < 10) {
                     element.style.cursor = 'pointer';
                     element.addEventListener('click', () => {
-                        window.location.href = `./?sorted=${i + 1}`;
+                        window.location.href = `/?sorted=${i + 1}`;
                     });
                 }
             });
@@ -53,7 +53,6 @@ window.onload = function() {
         const products = document.querySelectorAll('.product-card');
 
         function filterProducts() {
-            if (searchInput.value.trim() === '') return location.reload();
             const term = searchInput.value.toLowerCase();
             products.forEach(product => product.style.display = (product.querySelector('.product-name').innerText.toLowerCase().includes(term) || product.querySelector('.product-description').innerText.toLowerCase().includes(term)) ? '' : 'none');
             document.querySelectorAll('.product-grid').forEach(grid => grid.parentElement.style.display = Array.from(grid.children).some(product => product.style.display !== 'none') ? '' : 'none');

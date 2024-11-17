@@ -86,26 +86,11 @@ app.post("/product", isAdmin, (req, res) => {
   });
 });
 
-app.put("/product/:id", isAdmin, (req, res) => {
-  const { name, description, prix, note, image_url, new_id } = req.body;
-  if (!name || !prix || !note || !image_url) {
-    return res.status(400).send("Tous les champs (name, prix, note, image_url) doivent être remplis.");
-  }
-  let sql = "UPDATE product SET name = ?, description = ?, prix = ?, note = ?, image_url = ? WHERE id = ?";
-  const values = [name, description, prix, note, image_url, req.params.id];
-  if (new_id) {
-    sql = "UPDATE product SET name = ?, description = ?, prix = ?, note = ?, image_url = ?, id = ? WHERE id = ?";
-    values.push(new_id);
-  }
-
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("Erreur lors de la mise à jour du produit:", err);
-      return res.status(500).send("Erreur serveur");
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).send("Produit non trouvé");
-    }
+app.put("/product/:id", (req, res) => {
+  const { name, description, prix, note, image_url } = req.body;
+  const sql = "UPDATE product SET name=?, description=?, prix=?, note=?, image_url=? WHERE id=?";
+  db.query(sql, [name, description, prix, note, image_url, req.params.id], (err, result) => {
+    if (err) return res.status(500).send("Erreur serveur");
     res.send("Produit mis à jour avec succès !");
   });
 });
