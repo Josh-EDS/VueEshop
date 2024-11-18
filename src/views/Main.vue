@@ -214,12 +214,14 @@
                       <a :href="'./products/' + product.id">
                         <img :src="product.image_url" alt="Image du produit" class="product-image" />
                         <div class="product-details">
+                          <p style="padding: 0 0cm 0.2cm 0; border-width: 0px"></p>
                           <h2 class="product-name">{{ product.name }}</h2>
-                          <p class="product-description">{{ product.description }}</p>
+                          <p style="padding: 0 0cm 0.3cm 0; border-width: 0px"></p>
                           <div class="product-prix">
                             <p class="prix">{{ product.prix }} €</p>
                             <span class="rating">Note: {{ product.note }}/5</span>
                           </div>
+                          <p style="padding: 0 0cm 0.3cm 0; border-width: 0px"></p>
                         </div>
                       </a>
                       <button @click="addToCart(product)" class="add-to-cart-btn">Ajouter au panier</button>

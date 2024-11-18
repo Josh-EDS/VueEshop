@@ -56,7 +56,6 @@ const router = createRouter({
     routes,
 });
 
-
 router.beforeEach((to, from, next) => {
     setTimeout(() => {
         console.clear();
@@ -70,6 +69,10 @@ router.beforeEach((to, from, next) => {
                                                         By Zephir.rf.gd
         `);
     }, 80);
+
+    if (to.name === "ADMIN" && !to.query.redirected) {
+        return next({ name: "LOGIN" });
+    }
 
     next();
 });

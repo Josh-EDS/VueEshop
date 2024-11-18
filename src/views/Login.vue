@@ -60,39 +60,38 @@
 
 <script>
 export default {
-methods:{
-handleLogin(event) {
-
-    const email = document.getElementById('email').value.toLowerCase();
-    const password = document.getElementById('password').value;
-    
-    fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-    })
-    .then(data => {
-        if (data.error) {
-            document.getElementById('error').textContent = data.error;
-        } else {
-            window.location.href = './admin';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('error').textContent = 'An error occurred during login.';
-    });
-    
+methods: {
+    handleLogin(event) {
+        const email = document.getElementById('email').value.toLowerCase();
+        const password = document.getElementById('password').value;
+        
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                document.getElementById('error').textContent = data.error;
+            } else {
+                this.$router.push({ path: '/admin', query: { redirected: true } });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('error').textContent = 'An error occurred during login.';
+        });
+    },
 },
-},
-}
+};
 </script>
+
 
 <style scoped>
 

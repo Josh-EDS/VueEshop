@@ -252,22 +252,29 @@ app.get("/user", isAdmin, (req, res) => {
     });
   });
 
-  app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    const filePath = path.join(__dirname, "./data/submittedForms.json");
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) return res.status(500).json({ error: "Impossible de lire les données utilisateur" });
-      const users = data ? JSON.parse(data) : [];
-      const user = users.find(user => user.email.toLowerCase() === email.toLowerCase());
-      if (user && user.password === password) {
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  const filePath = path.join(__dirname, "./data/submittedForms.json");
+
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Impossible de lire les données utilisateur" });
+    
+    const users = data ? JSON.parse(data) : [];
+    const user = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+
+    if (user && user.password === password) {
+      if (user.role === "Admin") {
         res.json({ success: true });
       } else {
-        res.json({ error: "Email ou mot de passe incorrect" });
+        res.json({ error: "Accès refusé : Vous n'êtes pas administrateur" });
       }
-    });
+    } else {
+      res.json({ error: "Email ou mot de passe incorrect" });
+    }
   });
-  
+});
+
   
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
-});
+}); 
