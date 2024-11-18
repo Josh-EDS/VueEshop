@@ -17,5 +17,12 @@
     "lastname": "Mec",
     "email": "dawazage@gmail.com",
     "password": "3hFpXV2tL4sPDRP"
+  },
+  {
+    "firstname": "Raoul",
+    "lastname": "Kratos",
+    "email": "raoulbg75@tqt.com",
+    "password": "fhyzhfyz4324",
+    "role": "Admin"
   }
 ]
